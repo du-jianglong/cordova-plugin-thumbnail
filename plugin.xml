@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+            id="com.sinosoft.cordova.thumbnail" version="0.1.0">
+    <name>Thumbnail</name>
+    <description>Cordova Thumbnail Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,thumbnail,Android,iOS</keywords>
+    <js-module src="www/thumbnail.js" name="Thumbnails">
+        <clobbers target="Thumbnail" />
+    </js-module>
+</plugin>
