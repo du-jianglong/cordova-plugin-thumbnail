@@ -138,19 +138,20 @@
 @implementation ThumbnailCordovaPlugin
 
 - (void)thumbnail: (CDVInvokedUrlCommand*)command {
-    CDVPluginResult* pluginResult = nil;
-    NSString* sourceURL = [command.arguments objectAtIndex:0];
-    NSString* targetURL = [self getTargetURL: command];
-    CGSize size = [self getSize: command];
+    [self.commandDelegate runInBackground:^{
+        NSString* sourceURL = [command.arguments objectAtIndex:0];
+        NSString* targetURL = [self getTargetURL: command];
+        CGSize size = [self getSize: command];
 
-    [FileUtil createFileAtURL: targetURL];
-    [Thumbnail thumbnail:sourceURL size: size toURL:targetURL];
+        [FileUtil createFileAtURL: targetURL];
+        [Thumbnail thumbnail:sourceURL size: size toURL:targetURL];
 
-    CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-        messageAsString:targetURL];
+        CDVPluginResult* pluginResult = nil;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+            messageAsString:targetURL];
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 
 - (void)config: (CDVInvokedUrlCommand*)command {
