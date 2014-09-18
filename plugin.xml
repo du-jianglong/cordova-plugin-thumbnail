@@ -26,6 +26,22 @@
         <source-file src="src/android/TargetPathNotFoundException.java" target-dir="src/com/sinosoft/android/graphics/thumbnail" />
         <source-file src="src/android/Thumbnails.java" target-dir="src/com/sinosoft/android/graphics/thumbnail" />
         <source-file src="src/android/ThumbnailsCordovaPlugin.java" target-dir="src/com/sinosoft/android/graphics/thumbnail" />
-        
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Thumbnails">
+                <param name="ios-package" value="com.sinosoft.android.graphics.thumbnail.ThumbnailsCordovaPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/Thumbnail.h" />
+        <source-file src="src/ios/Thumbnail.m" />
+
+        <framework src="MobileCoreServices.framework" />
+        <framework src="CoreGraphics.framework" />
+        <framework src="CoreImage.framework" />
+        <framework src="ImageIO.framework" />
     </platform>
 </plugin>
