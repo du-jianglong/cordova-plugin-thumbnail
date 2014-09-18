@@ -2,7 +2,13 @@
 
 这个插件实现了生成图片缩略图的功能。支持Android和iOS。
 
-使用回调函数的方式：
+添加插件的方式：
+
+```
+cordova plugin add http://182.92.131.143/mobileoa/cordova-thumbnail-plugin.git
+```
+
+使用方式：
 
 ```
 window.Thumbnails.thumbnail(srcPath, width, height, function success(path) {
@@ -16,7 +22,7 @@ window.Thumbnails.thumbnail(srcPath, width, height, function success(path) {
 
 * `srcPath` 图片路径
 	
-	Android中支持的路径格式：`file:///path/to/spot`。
+	支持的路径格式：`file:///path/to/spot`。
 
 	在使用[Cordova File plugin](https://github.com/apache/cordova-plugin-file/)项目中，可以使用`FileEntry.toURL()`获取到`file://`开头的文件路径。
 
