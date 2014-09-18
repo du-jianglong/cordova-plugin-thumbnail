@@ -1,0 +1,1 @@
+Hello cordova-thumbnail-plugin
