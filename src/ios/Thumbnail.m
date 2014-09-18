@@ -126,7 +126,7 @@
     CGImageDestinationAddImage(destination, image, nil);
     
     if (!CGImageDestinationFinalize(destination)) {
-        NSLog(@"Failed to write image to %@", path);
+        NSLog(@"Failed to write image to %@", urlStr);
     }
     
     CFRelease(destination);
