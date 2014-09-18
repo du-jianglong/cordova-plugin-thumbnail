@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # com.sinosoft.cordova.thumbnail
 
 这个插件实现了生成图片缩略图的功能。支持Android和iOS。
