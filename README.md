@@ -39,3 +39,13 @@ window.Thumbnails.thumbnail(srcPath, width, height, function success(path) {
 
 * `successFn` 缩略图生成成功的回调函数
 * `failFn` 缩略图生成失败的回调函数
+
+## 在Android上使用插件要注意的事情
+
+要想在Android上不指定缩略图存放的路径，需要在`config.xml`文件中添加上以下配置：
+
+```
+<preference name="AndroidPersistentFileLocation" value="Internal" />
+```
+
+原因请参考[Cordova File plugin](https://github.com/apache/cordova-plugin-file/blob/master/doc/index.md#android-persistent-storage-location)中的说明。
