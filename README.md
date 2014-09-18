@@ -1,6 +1,6 @@
 # com.sinosoft.cordova.thumbnail
 
-这个插件实现了生成图片缩略图的功能。支持Android 4+和iOS 6+。
+这个插件实现了生成图片缩略图的功能。支持Android和iOS。
 
 使用回调函数的方式：
 
@@ -12,30 +12,19 @@ window.Thumbnails.thumbnail(srcPath, width, height, function success(path) {
 });
 ```
 
-promise的方式：
-
-```
-window.Thumbnails.thumbnail(srcPath, width, height).then(function(path) {
-	console.log("生成的缩略图存放在：" + path);
-}, function(error) {
-	console.error(error);
-});
-```
-
 `window.Thumbnails.thumbnail(srcPath, width, height, [options,] successFn, failFn)`的参数讲解：
 
 * `srcPath` 图片路径
 	
-	支持的路径格式：
-	
-	* base64方式的图片路径，如：`data:image/gif;base64,111111111`
-	* Android路径：cdvfile://localhost/persistent/DCIM/Camera/1395167011485.jpg
+	Android中支持的路径格式：`file:///path/to/spot`。
+
+	在使用[Cordova File plugin](https://github.com/apache/cordova-plugin-file/)项目中，可以使用`FileEntry.toURL()`获取到`file://`开头的文件路径。
 
 * `width` 缩略图的宽度
 * `height` 缩略图的高度
 * `options` 其他的配置参数对象
 
-	* `toPath` 缩略图存储路径
+	* `toPath` 缩略图存储路径，如果不指定，则会随机创建一个文件存储生成的缩略图。
 	* `srcPath` 图片路径
 	* `width` 缩略图宽度
 	* `height` 缩略图高度
