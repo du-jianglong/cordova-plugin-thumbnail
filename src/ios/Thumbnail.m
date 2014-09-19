@@ -31,7 +31,7 @@
         appDirectory = [appSupportDir URLByAppendingPathComponent:appBundleID];
         NSError* theError = nil;
         if (![sharedFM createDirectoryAtURL:appDirectory withIntermediateDirectories:YES
-                           attributes:nil error:&theError]) {
+                                 attributes:nil error:&theError]) {
             // Handle the error.
             return nil;
         }
@@ -44,14 +44,14 @@
     NSFileManager* sharedFM = [NSFileManager defaultManager];
     NSError __autoreleasing* theError = nil;
     return ([sharedFM createDirectoryAtURL:directoryURL withIntermediateDirectories:YES
-                         attributes:nil error:&theError]);
+                                attributes:nil error:&theError]);
 }
 
 + (BOOL) createDirectoryAtPath: (NSString *) directoryPath {
     NSFileManager* sharedFM = [NSFileManager defaultManager];
     NSError __autoreleasing* theError = nil;
     return ([sharedFM createDirectoryAtPath:directoryPath withIntermediateDirectories:YES
-                          attributes:nil error:&theError]);
+                                 attributes:nil error:&theError]);
 }
 
 + (BOOL) createFileAtURL: (NSString *) fileURL {
@@ -66,9 +66,9 @@
 
 + (NSString *) uuid {
     CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
-    NSString* uuidString = (NSString*)CFUUIDCreateString(kCFAllocatorDefault, uuid);
-    [uuidString autorelease];
-    CFRelease(uuid);
+    NSString* uuidString = (NSString*)CFBridgingRelease(CFUUIDCreateString(kCFAllocatorDefault, uuidObject));
+    
+    CFRelease(uuidObject);
     return uuidString;
 }
 
@@ -79,8 +79,8 @@
 + (void) thumbnail:(NSString *)imageURL size:(CGSize)size toURL:(NSString *) toURL
 {
     CIContext *context = [CIContext contextWithOptions:nil];
-    NSURL *imageURL = [URL URLWithString: imageURL];
-    CIImage *image = [CIImage imageWithContentsOfURL: imageURL];
+    NSURL* _imageURL = [NSURL URLWithString: imageURL];
+    CIImage *image = [CIImage imageWithContentsOfURL:_imageURL];
     CIImage *outputImage = [self thumbnailToCIImage:image size:size];
     CGImageRef cgimg = [context createCGImage:outputImage fromRect:[outputImage extent]];
     
@@ -105,7 +105,7 @@
 + (UIImage *) thumbnailToUIImage:(NSString *) imageURL size:(CGSize)size
 {
     CIContext *context = [CIContext contextWithOptions:nil];
-    NSURL *_imageURL = [URL URLWithString: imageURL];
+    NSURL *_imageURL = [NSURL URLWithString: imageURL];
     CIImage *image = [CIImage imageWithContentsOfURL: _imageURL];
     CIImage *outputImage = [self thumbnailToCIImage:image size:size];
     CGImageRef cgimg = [context createCGImage:outputImage fromRect:[outputImage extent]];
@@ -117,7 +117,7 @@
 + (BOOL) cgImageWriteToFile: (CGImageRef) image urlStr:(NSString *)urlStr
 {
     CFURLRef url = (__bridge CFURLRef)[NSURL URLWithString:urlStr];
-    CGImageDestinationRef destination = CGImageDestinationCreateWithURL(urlStr, kUTTypePNG, 1, NULL);
+    CGImageDestinationRef destination = CGImageDestinationCreateWithURL(url, kUTTypePNG, 1, NULL);
     if (!destination) {
         NSLog(@"Failed to create CGImageDestination for %@", urlStr);
         return NO;
@@ -142,14 +142,14 @@
         NSString* sourceURL = [command.arguments objectAtIndex:0];
         NSString* targetURL = [self getTargetURL: command];
         CGSize size = [self getSize: command];
-
+        
         [FileUtil createFileAtURL: targetURL];
         [Thumbnail thumbnail:sourceURL size: size toURL:targetURL];
-
+        
         CDVPluginResult* pluginResult = nil;
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-            messageAsString:targetURL];
-
+                                         messageAsString:targetURL];
+        
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
@@ -160,8 +160,8 @@
 }
 
 - (CGSize) getSize: (CDVInvokedUrlCommand *) command {
-    int width;
-    int height;
+    NSNumber* width = nil;
+    NSNumber* height = nil;
     if ([command.arguments count] == 3) {
         width = [command.arguments objectAtIndex:1];
         height = [command.arguments objectAtIndex:2];
@@ -169,23 +169,23 @@
         width = [command.arguments objectAtIndex:2];
         height = [command.arguments objectAtIndex:3];
     }
-    return CGSizeMake(width * 1.0f, height * 1.0f);
+    return CGSizeMake([width floatValue], [height floatValue]);
 }
 
 - (NSString *) getTargetURL: (CDVInvokedUrlCommand *) command {
     NSString* targetURL;
     NSString* sourceURL = [command.arguments objectAtIndex:0];
     NSString* extname = [@"." stringByAppendingString:[sourceURL pathExtension]];
-
+    
     if ([command.arguments count] == 3) {
         NSString* uuid = [FileUtil uuid];
         NSString* filename = [uuid stringByAppendingString:extname];
-        NSURL* _targetURL = [[FileUtil appDirectory] URLByAppendingPathComponent:filename];
+        NSURL* _targetURL = [[FileUtil applicationDataDirectory] URLByAppendingPathComponent:filename];
         targetURL = [_targetURL absoluteString];
     } else {
         targetURL = [command.arguments objectAtIndex:1];
     }
-
+    
     return targetURL;
 }
 
