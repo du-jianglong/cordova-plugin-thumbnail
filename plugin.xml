@@ -31,7 +31,7 @@
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
             <feature name="Thumbnails">
-                <param name="ios-package" value="com.sinosoft.android.graphics.thumbnail.ThumbnailsCordovaPlugin"/>
+                <param name="ios-package" value="ThumbnailCordovaPlugin"/>
                 <param name="onload" value="true" />
             </feature>
         </config-file>
